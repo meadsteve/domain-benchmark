@@ -42,6 +42,6 @@ class Person:
 def parse_data(raw: Dict) -> Person:
     return Person(
         username=Username(raw["username"]),
-        age=Age(raw["age"]),
+        age=Age(int(raw["age"]) if raw["age"] is not None else None),
         email=EmailAddress(raw["email"])
     )

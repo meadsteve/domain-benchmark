@@ -11,6 +11,7 @@ def assert_valid_username(value: Optional[str]):
 def assert_valid_age(value):
     if not value:
         raise RuntimeError("Age can not be empty")
+    value = int(value)
     if value < 0:
         raise RuntimeError("You must have been born. Please wait...")
     if value > 200:

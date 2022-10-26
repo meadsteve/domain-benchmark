@@ -4,9 +4,10 @@ Some very basic benchmarking on the performance difference between "code preferr
 "plain types and dicts".
 
 ## Happy Path
-
+```bash
 pytest . -m "happy" --benchmark-save=happy_path --benchmark-disable-gc
 USE_DOMAIN_OBJECTS=1 pytest . -m "happy"  --benchmark-compare=0001 --benchmark-save=happy_path --benchmark-disable-gc
+```
 
 ```
 
@@ -24,9 +25,10 @@ Legend:
 ```
 
 ## Sad Path
-
+```bash
 pytest . -m "sad" --benchmark-save=sad_path --benchmark-disable-gc
 USE_DOMAIN_OBJECTS=1 pytest . -m "sad"  --benchmark-compare=0003 --benchmark-save=sad_path --benchmark-disable-gc
+```
 
 ```
 
@@ -44,3 +46,22 @@ Legend:
 
 
 ```
+
+## With an API to slow things down
+```bash
+uvicorn parrot_api:app --reload
+
+pytest . -m "happy_web" --benchmark-save=happy_web_path --benchmark-disable-gc
+USE_DOMAIN_OBJECTS=1 pytest . -m "happy_web" --benchmark-compare=0005 --benchmark-save=happy_web_path --benchmark-disable-gc
+```
+
+
+```
+-------------------------------------------------------------------------------------------------------- benchmark: 2 tests -------------------------------------------------------------------------------------------------------
+Name (time in ms)                                                      Min                Max               Mean            StdDev             Median                IQR            Outliers      OPS            Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+test_valid_users_get_parsed_and_no_data_is_lost (0005_happy_w)     10.2608 (1.0)      35.8208 (1.81)     18.8076 (1.24)     7.6562 (4.94)     15.4346 (1.04)     14.2687 (8.69)         23;0  53.1700 (0.81)         70           1
+test_valid_users_get_parsed_and_no_data_is_lost (NOW)              12.2650 (1.20)     19.7666 (1.0)      15.1955 (1.0)      1.5512 (1.0)      14.8576 (1.0)       1.6427 (1.0)          16;2  65.8088 (1.0)          52           1
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+```
+
